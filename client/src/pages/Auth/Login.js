@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Layout from "../../components/Layout/Layout";
 import { toast } from "react-hot-toast";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import "./auth.css";
 import { useAuth } from "../../context/AuthProvider";
 
@@ -11,6 +11,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [auth, setAuth] = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,13 +26,17 @@ const Login = () => {
           token: response.data.token,
         });
         localStorage.setItem("auth", JSON.stringify(response.data));
-        navigate("/");
+        navigate(location.state || "/");
       } else {
         toast.error(response.data.message);
       }
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const handleForgotPassword = () => {
+    navigate("/forgot-password");
   };
 
   return (
@@ -67,9 +72,18 @@ const Login = () => {
               required
             />
           </div>
-          <button type="submit" className="btn btn-primary">
-            Login
-          </button>
+          <div className="buttonContainer">
+            <button type="submit" className="btn btn-primary">
+              Login
+            </button>
+            <button
+              type="button"
+              onClick={handleForgotPassword}
+              className="btn btn-secondary"
+            >
+              Forgot Password
+            </button>
+          </div>
         </form>
       </div>
     </Layout>

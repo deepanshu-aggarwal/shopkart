@@ -40,30 +40,51 @@ const Header = () => {
                   Category
                 </NavLink>
               </li>
-              {!auth.user ? (
-                <>
-                  <li className="nav-item">
-                    <NavLink to="/register" className="nav-link">
-                      Register
-                    </NavLink>
-                  </li>
-                  <li className="nav-item">
-                    <NavLink to="/login" className="nav-link">
-                      Login
-                    </NavLink>
-                  </li>
-                </>
-              ) : (
-                <li className="nav-item">
-                  <NavLink
-                    to="/login"
-                    className="nav-link"
-                    onClick={handleLogout}
-                  >
-                    Logout
-                  </NavLink>
-                </li>
-              )}
+              <li className="nav-item dropdown">
+                <NavLink
+                  className="nav-link dropdown-toggle"
+                  href="#"
+                  role="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  {auth?.user ? auth.user.name : "Guest"}
+                </NavLink>
+                <ul className="dropdown-menu">
+                  {!auth.user && (
+                    <li>
+                      <NavLink to="/register" className="nav-link">
+                        Register
+                      </NavLink>
+                    </li>
+                  )}
+                  {!auth.user && (
+                    <li>
+                      <NavLink to="/login" className="nav-link">
+                        Login
+                      </NavLink>
+                    </li>
+                  )}
+                  {auth.user && (
+                    <li>
+                      <NavLink to="/dashboard" className="nav-link">
+                        Dashboard
+                      </NavLink>
+                    </li>
+                  )}
+                  {auth.user && (
+                    <li>
+                      <NavLink
+                        to="/login"
+                        className="nav-link"
+                        onClick={handleLogout}
+                      >
+                        Logout
+                      </NavLink>
+                    </li>
+                  )}
+                </ul>
+              </li>
               <li className="nav-item">
                 <NavLink to="/cart" className="nav-link">
                   Cart {0}

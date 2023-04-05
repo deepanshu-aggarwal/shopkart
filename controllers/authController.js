@@ -4,7 +4,7 @@ import User from "../models/userModel.js";
 
 export const registerController = async (req, res) => {
   try {
-    const { name, email, password, phone, address } = req.body;
+    const { name, email, password, phone, address, answer } = req.body;
     if (!name) {
       return res.status(200).send({ message: "Name is required" });
     } else if (!email) {
@@ -15,6 +15,8 @@ export const registerController = async (req, res) => {
       return res.status(200).send({ message: "Phone is required" });
     } else if (!address) {
       return res.status(200).send({ message: "Address is required" });
+    } else if (!answer) {
+      return res.status(200).send({ message: "Answer is required" });
     }
 
     // checking for existing user
@@ -32,16 +34,17 @@ export const registerController = async (req, res) => {
       password: hashedPassword,
       phone: phone,
       address: address,
+      answer: answer,
     });
     res.status(201).send({
       message: "User created successfully",
       success: true,
       user: {
         _id: createdUser.id,
-        name: name,
-        email: email,
-        phone: phone,
-        address: address,
+        name: createdUser.name,
+        email: createdUser.email,
+        phone: createdUser.phone,
+        address: createdUser.address,
       },
     });
   } catch (error) {
@@ -87,5 +90,51 @@ export const loginController = async (req, res) => {
     return res
       .status(500)
       .send({ success: false, message: "Error in login, try again", error });
+  }
+};
+
+export const forgotPasswordController = async (req, res) => {
+  try {
+    const { email, answer, newPassword } = req.body;
+    if (!email) {
+      return res.status(400).send({ message: "Email is required" });
+    } else if (!answer) {
+      return res.status(400).send({ message: "Answer is required" });
+    } else if (!newPassword) {
+      return res.status(400).send({ message: "New password is required" });
+    }
+
+    const user = await User.findOne({ email });
+
+    if (!user)
+      return res
+        .status(404)
+        .send({ success: false, message: "User not found" });
+    if (answer !== user.answer)
+      return res
+        .status(404)
+        .send({ success: false, message: "Invalid answer to the question" });
+
+    const encryptedPassword = await hashPassword(newPassword);
+    const updatedUser = await User.findByIdAndUpdate(user._id, {
+      password: encryptedPassword,
+    });
+
+    res.status(200).send({
+      success: true,
+      message: "New Password updated",
+      user: {
+        name: updatedUser.name,
+        email: updatedUser.email,
+        phone: updatedUser.phone,
+        address: updatedUser.address,
+      },
+    });
+  } catch (error) {
+    res.status(500).send({
+      success: false,
+      message: "Something went wrong",
+      error,
+    });
   }
 };

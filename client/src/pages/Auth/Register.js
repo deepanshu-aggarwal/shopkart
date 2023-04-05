@@ -11,12 +11,13 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
+  const [answer, setAnswer] = useState("");
 
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const data = { name, email, password, phone, address };
+    const data = { name, email, password, phone, address, answer };
     try {
       const response = await axios.post("/api/v1/auth/register", data);
       if (response && response.data.success) {
@@ -101,6 +102,20 @@ const Register = () => {
               placeholder="Enter Address"
               value={address}
               onChange={(e) => setAddress(e.target.value)}
+              required
+            />
+          </div>
+          <div className="mb-3">
+            <label htmlFor="answer" className="form-label">
+              What is your nickname? Answer to question for password recovery.
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              id="answer"
+              placeholder="Enter Answer"
+              value={answer}
+              onChange={(e) => setAnswer(e.target.value)}
               required
             />
           </div>

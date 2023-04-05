@@ -2,6 +2,7 @@ import express from "express";
 import {
   registerController,
   loginController,
+  forgotPasswordController,
 } from "../controllers/authController.js";
 import { requireSignIn } from "../middlewares/authMiddleware.js";
 
@@ -12,6 +13,8 @@ const router = express.Router();
 router.post("/register", registerController);
 // Login (Post)
 router.post("/login", loginController);
+// Forgot Password (Post)
+router.post("/forgot-password", forgotPasswordController);
 
 // protected route auth
 router.get("/user-auth", requireSignIn, (req, res) => {
