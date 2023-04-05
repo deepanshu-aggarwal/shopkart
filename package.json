@@ -1,0 +1,32 @@
+{
+  "name": "shopkart",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deepanshu-aggarwal/shopkart.git"
+  },
+  "keywords": [],
+  "author": "Deepanshu Aggarwal",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/deepanshu-aggarwal/shopkart/issues"
+  },
+  "homepage": "https://github.com/deepanshu-aggarwal/shopkart#readme",
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "colors": "^1.4.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.0",
+    "mongoose": "^7.0.3",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.22"
+  }
+}
