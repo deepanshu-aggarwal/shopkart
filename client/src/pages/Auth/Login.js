@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import Layout from "../../components/Layout/Layout";
 import { toast } from "react-hot-toast";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./auth.css";
 import { useAuth } from "../../context/AuthProvider";
+import { Button, Form } from "semantic-ui-react";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -40,53 +40,39 @@ const Login = () => {
   };
 
   return (
-    <Layout>
-      <div className="formContainer">
-        <div className="title">Login</div>
-        <form onSubmit={handleSubmit}>
-          <div className="mb-3">
-            <label htmlFor="email" className="form-label">
-              Email address
-            </label>
-            <input
-              type="email"
-              className="form-control"
-              id="email"
-              placeholder="Enter Email Address"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
-          <div className="mb-3">
-            <label htmlFor="password" className="form-label">
-              Password
-            </label>
-            <input
-              type="password"
-              className="form-control"
-              id="password"
-              placeholder="Enter Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
-          <div className="buttonContainer">
-            <button type="submit" className="btn btn-primary">
-              Login
-            </button>
-            <button
-              type="button"
-              onClick={handleForgotPassword}
-              className="btn btn-secondary"
-            >
-              Forgot Password
-            </button>
-          </div>
-        </form>
-      </div>
-    </Layout>
+    <div className="formContainer">
+      <div className="title">Login</div>
+      <Form onSubmit={handleSubmit}>
+        <Form.Field>
+          <label htmlFor="email">Email address</label>
+          <input
+            type="email"
+            id="email"
+            placeholder="Enter Email Address"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+        </Form.Field>
+        <Form.Field>
+          <label htmlFor="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            placeholder="Enter Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </Form.Field>
+        <div className="buttonContainer">
+          <Button type="submit">Login</Button>
+          <Button type="button" onClick={handleForgotPassword}>
+            Forgot Password
+          </Button>
+        </div>
+      </Form>
+    </div>
   );
 };
 
