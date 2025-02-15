@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./auth.css";
 import { toast } from "react-hot-toast";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Button, Form } from "semantic-ui-react";
+import { useAuth } from "../../context/AuthProvider";
 
 const Register = () => {
   const [name, setName] = useState("");
@@ -17,14 +18,20 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const data = { name, email, password, phone, address, answer };
     try {
-      const response = await axios.post("/api/v1/auth/register", data);
-      if (response && response.data.success) {
-        toast.success(response.data.message);
+      const { data } = await axios.post("/api/v1/auth/register", {
+        name,
+        email,
+        password,
+        phone,
+        address,
+        answer,
+      });
+      if (data.success) {
+        toast.success(data.message);
         navigate("/login");
       } else {
-        toast.error(response.data.message);
+        toast.error(data.message);
       }
     } catch (error) {
       console.log(error);

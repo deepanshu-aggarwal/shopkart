@@ -1,0 +1,13 @@
+.price {
+  margin-top: 20px;
+}
+
+.image {
+  height: 200px;
+  width: 200px;
+  /* object-fit: contain; */
+}
+
+.ant-modal-body {
+  display: flex;
+}
