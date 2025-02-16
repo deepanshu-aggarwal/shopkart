@@ -6,6 +6,7 @@ export const requireSignIn = async (req, res, next) => {
   try {
     if (!req.headers.authorization) {
       res.status(400).send({ message: "Token not present" });
+      return;
     }
     const decode = await JWT.verify(
       req.headers.authorization,
@@ -13,9 +14,12 @@ export const requireSignIn = async (req, res, next) => {
     );
 
     const user = await User.findById(decode.id);
-    if (!user) res.status(404).send({ message: "Invalid Token" });
+    if (!user){
+      res.status(404).send({ message: "Invalid Token" });
+      return;
+    }
 
-    req.user = decode;
+    req.user = decode; // modifying the request object, adding authenticated user to it
     next();
   } catch (error) {
     console.log(error);

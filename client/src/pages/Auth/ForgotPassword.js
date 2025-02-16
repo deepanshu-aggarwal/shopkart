@@ -65,7 +65,9 @@ const ForgotPassword = () => {
             required
           />
         </Form.Field>
-        <Button type="submit">Submit</Button>
+        <Button type="submit" primary>
+          Submit
+        </Button>
       </Form>
     </div>
   );

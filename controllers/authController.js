@@ -36,7 +36,8 @@ export const registerController = async (req, res) => {
       address: address,
       answer: answer,
     });
-    res.status(201).send({
+
+    return res.status(201).send({
       message: "User created successfully",
       success: true,
       user: {
@@ -60,22 +61,26 @@ export const loginController = async (req, res) => {
   try {
     const { email, password } = req.body;
     if (!email || !password) {
-      return res.status(200).send({ message: "Invalid email or password" });
+      return res
+        .status(200)
+        .send({ success: false, message: "Email or password is missing" });
     }
 
     const user = await User.findOne({ email });
     if (!user)
       return res
         .status(200)
-        .send({ success: false, message: "Wrong credentials" });
+        .send({ success: false, message: "User not found" });
 
     const isValidPassword = await comparePassword(password, user.password);
     if (!isValidPassword)
-      return res.status(200).send({ success: false, message: "Access Denied" });
+      return res
+        .status(200)
+        .send({ success: false, message: "Email or password invalid" });
 
     const token = await generateToken(user._id);
 
-    res.status(200).send({
+    return res.status(200).send({
       success: true,
       message: "Login Successful",
       user: {
@@ -83,6 +88,7 @@ export const loginController = async (req, res) => {
         email: user.email,
         phone: user.phone,
         address: user.address,
+        role: user.role,
       },
       token,
     });
@@ -97,22 +103,22 @@ export const forgotPasswordController = async (req, res) => {
   try {
     const { email, answer, newPassword } = req.body;
     if (!email) {
-      return res.status(400).send({ message: "Email is required" });
+      return res.status(200).send({ message: "Email is required" });
     } else if (!answer) {
-      return res.status(400).send({ message: "Answer is required" });
+      return res.status(200).send({ message: "Answer is required" });
     } else if (!newPassword) {
-      return res.status(400).send({ message: "New password is required" });
+      return res.status(200).send({ message: "New password is required" });
     }
 
     const user = await User.findOne({ email });
 
     if (!user)
       return res
-        .status(404)
+        .status(200)
         .send({ success: false, message: "User not found" });
     if (answer !== user.answer)
       return res
-        .status(404)
+        .status(200)
         .send({ success: false, message: "Invalid answer to the question" });
 
     const encryptedPassword = await hashPassword(newPassword);
@@ -120,7 +126,7 @@ export const forgotPasswordController = async (req, res) => {
       password: encryptedPassword,
     });
 
-    res.status(200).send({
+    return res.status(200).send({
       success: true,
       message: "New Password updated",
       user: {
@@ -131,7 +137,7 @@ export const forgotPasswordController = async (req, res) => {
       },
     });
   } catch (error) {
-    res.status(500).send({
+    return res.status(500).send({
       success: false,
       message: "Something went wrong",
       error,
