@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -15,20 +15,22 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const data = { email, password };
     try {
-      const response = await axios.post("/api/v1/auth/login", data);
-      if (response && response.data.success) {
-        toast.success(response.data.message);
+      const { data } = await axios.post("/api/v1/auth/login", {
+        email,
+        password,
+      });
+      if (data.success) {
         setAuth({
           ...auth,
-          user: response.data.user,
-          token: response.data.token,
+          user: data.user,
+          token: data.token,
         });
-        localStorage.setItem("auth", JSON.stringify(response.data));
+        localStorage.setItem("auth", JSON.stringify(data));
         navigate(location.state || "/");
+        toast.success(data.message);
       } else {
-        toast.error(response.data.message);
+        toast.error(data.message);
       }
     } catch (error) {
       console.log(error);
@@ -66,8 +68,10 @@ const Login = () => {
           />
         </Form.Field>
         <div className="buttonContainer">
-          <Button type="submit">Login</Button>
-          <Button type="button" onClick={handleForgotPassword}>
+          <Button type="submit" primary>
+            Login
+          </Button>
+          <Button secondary onClick={handleForgotPassword}>
             Forgot Password
           </Button>
         </div>

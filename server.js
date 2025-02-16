@@ -4,6 +4,9 @@ import dotenv from "dotenv";
 import connectDB from "./config/db.js";
 import morgan from "morgan";
 import authRoutes from "./routes/authRoute.js";
+import categoryRoutes from "./routes/categoryRoute.js";
+import productRoutes from "./routes/productRoute.js";
+import orderRoutes from "./routes/orderRoute.js";
 import cors from "cors";
 
 // configure env
@@ -29,6 +32,9 @@ app.get("/", (req, res) => {
 
 // Routes
 app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/category", categoryRoutes);
+app.use("/api/v1/product", productRoutes);
+app.use("/api/v1/order", orderRoutes);
 
 const PORT = process.env.PORT || 5000;
 
